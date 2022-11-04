@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 
 
+# URL
 class Url:
     def __init__(self, scheme, authority, path=None, query=None, fragment=''):
         self.scheme = scheme
@@ -39,6 +40,34 @@ class WikiUrl(HttpsUrl):
         super().__init__("wikipedia.org", path, query, fragment)
 
 
+# URL CREATOR
+class UrlCreator:
+
+    __eq__ = Url.__eq__
+    __str__ = Url.__str__
+
+    def __init__(self, scheme, authority, path=None, query=None, fragment=None):
+        self.scheme = scheme
+        self.authority = authority
+        self.path = path if path else []
+        self.query = query
+        self.fragment = fragment
+
+    def _create(self):
+        return Url(self.scheme, self.authority, self.path, self.query, self.fragment)
+
+    def __getattr__(self, attr):
+        self.path.append(attr)
+        return self
+
+    def __call__(self, *args, **kwargs):
+        if args:
+            self.path = list(args)
+        if kwargs:
+            self.query = kwargs
+        return self
+
+
 if __name__ == '__main__':
     # URL class assertion
     assert GoogleUrl() == HttpsUrl(authority='google.com')
@@ -49,3 +78,13 @@ if __name__ == '__main__':
                    ) == 'https://wikipedia.org/wiki/python'
     assert GoogleUrl(query={'q': 'python', 'result': 'json'}
                      ) == 'https://google.com?q=python&result=json'
+
+    # URL CREATOR class assertion
+    url_creator = UrlCreator(scheme='https', authority='docs.python.org')
+    assert url_creator.docs.v1.api.list == 'https://docs.python.org/docs/v1/api/list'
+    assert url_creator(
+        'api', 'v1', 'list') == 'https://docs.python.org/api/v1/list'
+    assert url_creator(
+        'api', 'v1', 'list', q='my_list') == 'https://docs.python.org/api/v1/list?q=my_list'
+    assert url_creator('3').search(q='getattr', check_keywords='yes', area='default')._create() == \
+        'https://docs.python.org/3/search?q=getattr&check_keywords=yes&area=default'
