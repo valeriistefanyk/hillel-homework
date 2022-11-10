@@ -16,16 +16,17 @@ def main():
     py_shebang = '#!/usr/bin/python3'
 
     # 4.a
-    subprocess.run(['cp', 'dz1_1.py', run_file])
+    subprocess.run(['sudo', 'cp', 'dz1_1.py', run_file])
 
     # 4.b
+    subprocess.run(['sudo', 'chmod', '777', run_file])
     write_to_beginning(run_file, py_shebang)
 
     # 4.c
-    subprocess.run(['chmod', '500', run_file])
+    subprocess.run(['sudo', 'chmod', '500', run_file])
 
     # 4.d
-    subprocess.run([f'./{run_file}'])
+    subprocess.run(['sudo', f'./{run_file}'])
 
 
 if __name__ == '__main__':

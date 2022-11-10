@@ -16,7 +16,7 @@ def main():
     subprocess.run(["pwd"])
 
     # 3.c
-    subprocess.run(["mkdir", "dz1"])
+    subprocess.run(["sudo", "mkdir", "dz1"])
 
     # 3.d
     now = datetime.datetime.now()
@@ -25,14 +25,14 @@ def main():
     days_per_month = calendar.monthrange(now.year, now.month)[1]
     log_filenames = ([gen_log_filename(day, month, year)
                       for day in range(1, days_per_month + 1)])
-    subprocess.run(['touch', *log_filenames], cwd='dz1')
+    subprocess.run(['sudo', 'touch', *log_filenames], cwd='dz1')
 
     # 3.e
     subprocess.run(['sudo', 'chown', '-R', 'root:root', 'dz1'])
 
     # 3.f
     files_to_remove = random.sample(log_filenames, 5)
-    subprocess.run(['rm', *files_to_remove], cwd='dz1')
+    subprocess.run(['sudo', 'rm', '-rf', *files_to_remove], cwd='dz1')
 
 
 main()
