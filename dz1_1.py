@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import subprocess
 import calendar
 import datetime
@@ -37,5 +35,4 @@ def main():
     subprocess.run(['rm', *files_to_remove], cwd='dz1')
 
 
-if __name__ == '__main__':
-    main()
+main()
