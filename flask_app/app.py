@@ -2,6 +2,7 @@ from flask import Flask, request
 import time
 import string
 import random
+import os
 
 app = Flask(__name__)
 
@@ -89,4 +90,5 @@ def random_string():
 
 
 if __name__ == "__main__":
-    app.run()
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
